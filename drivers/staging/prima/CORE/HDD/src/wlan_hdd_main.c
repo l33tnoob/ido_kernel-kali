@@ -10738,12 +10738,12 @@ void hdd_wlan_exit(hdd_context_t *pHddCtx)
 #endif
    hddLog(LOG1, FL("Unregister IPv4 notifier"));
    unregister_inetaddr_notifier(&pHddCtx->ipv4_notifier);
-
+/*
    // Unregister the Net Device Notifier
    unregister_netdevice_notifier(&hdd_netdev_notifier);
    
    hdd_stop_all_adapters( pHddCtx );
-
+*/
 #ifdef WLAN_BTAMP_FEATURE
    vosStatus = WLANBAP_Stop(pVosContext);
    if (!VOS_IS_STATUS_SUCCESS(vosStatus))
@@ -12426,7 +12426,7 @@ int hdd_wlan_startup(struct device *dev )
       hddLog(VOS_TRACE_LEVEL_FATAL,"%s: hddDevTmRegisterNotifyCallback failed",__func__);
       goto err_unregister_pmops;
    }
-
+/*
    // register net device notifier for device change notification
    ret = register_netdevice_notifier(&hdd_netdev_notifier);
 
@@ -12435,12 +12435,12 @@ int hdd_wlan_startup(struct device *dev )
       hddLog(VOS_TRACE_LEVEL_ERROR,"%s: register_netdevice_notifier failed",__func__);
       goto err_unregister_pmops;
    }
-
+*/
    //Initialize the BTC service
    if(btc_activate_service(pHddCtx) != 0)
    {
       hddLog(VOS_TRACE_LEVEL_FATAL,"%s: btc_activate_service failed",__func__);
-      goto err_reg_netdev;
+ //     goto err_reg_netdev;
    }
 
 #ifdef FEATURE_OEM_DATA_SUPPORT
@@ -12449,7 +12449,7 @@ int hdd_wlan_startup(struct device *dev )
    {
        hddLog(VOS_TRACE_LEVEL_FATAL,
               "%s: oem_activate_service failed", __func__);
-       goto err_reg_netdev;
+//       goto err_reg_netdev;
    }
 #endif
 
@@ -12458,7 +12458,7 @@ int hdd_wlan_startup(struct device *dev )
    if(ptt_sock_activate_svc(pHddCtx) != 0)
    {
       hddLog(VOS_TRACE_LEVEL_FATAL,"%s: ptt_sock_activate_svc failed",__func__);
-      goto err_reg_netdev;
+//      goto err_reg_netdev;
    }
 #endif
 
@@ -12466,7 +12466,7 @@ int hdd_wlan_startup(struct device *dev )
    if (hdd_open_cesium_nl_sock() < 0)
    {
       hddLog(VOS_TRACE_LEVEL_FATAL,"%s: hdd_open_cesium_nl_sock failed", __func__);
-      goto err_reg_netdev;
+//      goto err_reg_netdev;
    }
 #endif
 
@@ -12481,7 +12481,7 @@ int hdd_wlan_startup(struct device *dev )
        {
            hddLog(VOS_TRACE_LEVEL_ERROR, "%s: wlan_logging_sock_activate_svc"
                    " failed", __func__);
-           goto err_reg_netdev;
+//           goto err_reg_netdev;
        }
        //TODO: To Remove enableDhcpDebug and use gEnableDebugLog for
        //EAPOL and DHCP
@@ -12632,8 +12632,8 @@ int hdd_wlan_startup(struct device *dev )
 
    goto success;
 
-err_reg_netdev:
-   unregister_netdevice_notifier(&hdd_netdev_notifier);
+/*err_reg_netdev:
+   unregister_netdevice_notifier(&hdd_netdev_notifier);*/
 
 err_unregister_pmops:
    hddDevTmUnregisterNotifyCallback(pHddCtx);
